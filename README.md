@@ -157,16 +157,33 @@ application success: always await and assert the returned application futures.
 ## Run the example and checks
 
 ```sh
-dart pub get
-dart run example/flutter_resilience_test_example.dart
+dart pub get --no-example
 dart analyze --fatal-infos
 dart test
-dart format --output=none --set-exit-if-changed .
+dart format --output=none --set-exit-if-changed lib test
 ```
 
 The runnable example demonstrates single-flight refresh. The test suite includes
 its deliberately broken variant to prove the assertion detects duplicate refresh.
-The GitHub Actions workflow runs checks on Dart 3.9.0 and stable when hosted.
+The GitHub Actions workflow analyzes and tests the package on Dart 3.9.0 and
+current stable. Formatting uses **Dart 3.9.0**, also bundled with the pinned
+Flutter 3.35.0 example job. A newer stable SDK is a compatibility check, not a
+second formatting standard.
+
+All files under `example/`, including the command-line example, are formatted
+and run in the Flutter job after `flutter pub get`. From `example/`, run the
+command-line example with `dart run flutter_resilience_test_example.dart`.
+
+Before committing, run all three jobs locally with your SDK paths:
+
+```sh
+bash tool/check_ci.sh /path/to/flutter-3.35.0/bin/flutter /path/to/stable/dart
+```
+
+This checks formatting without modifying files, analyzes and tests both Dart
+versions, and validates and builds the Flutter example. If formatting fails,
+use Dart 3.9.0 to format the affected files, then commit those file changes
+together with the workflow. Re-running an old GitHub run uses the old commit.
 
 ## Contributing
 

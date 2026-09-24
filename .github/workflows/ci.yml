@@ -12,15 +12,15 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
-      # The example is a Flutter app and is validated by flutter-example below.
-      # A Dart-only runner cannot resolve Flutter SDK dependencies.
+      # No Flutter SDK is installed in this job, including for the CLI example.
       - run: dart pub get --no-example
+      # Use one fixed formatter. Stable remains a compatibility test target,
+      # but its formatter can change independently of the project's source.
       - name: Check Dart formatting
-        if: matrix.sdk == 'stable'
-        run: dart format --output=none --set-exit-if-changed lib test example/flutter_resilience_test_example.dart
+        if: matrix.sdk == '3.9.0'
+        run: dart format --output=none --set-exit-if-changed lib test
       - run: dart analyze --fatal-infos
       - run: dart test
-      - run: dart run example/flutter_resilience_test_example.dart
 
   flutter-example:
     runs-on: ubuntu-latest
@@ -34,11 +34,14 @@ jobs:
       - run: flutter pub get
         working-directory: example
       - name: Check Flutter example formatting
-        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
+        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver flutter_resilience_test_example.dart
         working-directory: example
       - run: flutter analyze --fatal-infos
         working-directory: example
       - run: flutter test
+        working-directory: example
+      - name: Run command-line example
+        run: dart run flutter_resilience_test_example.dart
         working-directory: example
       - run: flutter build web
         working-directory: example
