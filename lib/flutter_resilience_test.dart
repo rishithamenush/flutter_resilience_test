@@ -3,3 +3,4 @@ library;
 
 export 'src/resilience_adapter.dart';
 export 'src/scenarios.dart';
+
