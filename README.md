@@ -189,5 +189,6 @@ together with the workflow. Re-running an old GitHub run uses the old commit.
 
 Issues and pull requests are welcome in the
 [GitHub repository](https://github.com/rishithamenush/flutter_resilience_test).
+
 Before opening a pull request, run the formatting, analysis, and test commands
 above.
