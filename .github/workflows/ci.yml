@@ -1,0 +1,36 @@
+name: Package and example checks
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: ['3.9.0', stable]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - run: dart pub get
+      - run: dart format --output=none --set-exit-if-changed lib test example/lib example/test example/integration_test example/test_driver example/flutter_resilience_test_example.dart
+      - run: dart analyze --fatal-infos
+      - run: dart test
+      - run: dart run example/flutter_resilience_test_example.dart
+
+  flutter-example:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+        working-directory: example
+      - run: flutter analyze --fatal-infos
+        working-directory: example
+      - run: flutter test
+        working-directory: example
+      - run: flutter build web
+        working-directory: example
