@@ -135,3 +135,4 @@ final class ConcurrentRefreshScenario {
     adapter.verify();
   }
 }
+
