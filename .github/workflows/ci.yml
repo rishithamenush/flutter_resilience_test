@@ -15,7 +15,9 @@ jobs:
       # The example is a Flutter app and is validated by flutter-example below.
       # A Dart-only runner cannot resolve Flutter SDK dependencies.
       - run: dart pub get --no-example
-      - run: dart format --output=none --set-exit-if-changed lib test example/lib example/test example/integration_test example/test_driver example/flutter_resilience_test_example.dart
+      - name: Check Dart formatting
+        if: matrix.sdk == 'stable'
+        run: dart format --output=none --set-exit-if-changed lib test example/flutter_resilience_test_example.dart
       - run: dart analyze --fatal-infos
       - run: dart test
       - run: dart run example/flutter_resilience_test_example.dart
@@ -30,6 +32,9 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+        working-directory: example
+      - name: Check Flutter example formatting
+        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver
         working-directory: example
       - run: flutter analyze --fatal-infos
         working-directory: example
