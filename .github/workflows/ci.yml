@@ -4,6 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: ['3.9.0', stable]
     steps:
@@ -11,7 +12,9 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
-      - run: dart pub get
+      # The example is a Flutter app and is validated by flutter-example below.
+      # A Dart-only runner cannot resolve Flutter SDK dependencies.
+      - run: dart pub get --no-example
       - run: dart format --output=none --set-exit-if-changed lib test example/lib example/test example/integration_test example/test_driver example/flutter_resilience_test_example.dart
       - run: dart analyze --fatal-infos
       - run: dart test

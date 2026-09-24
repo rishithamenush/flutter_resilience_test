@@ -171,6 +171,6 @@ The GitHub Actions workflow runs checks on Dart 3.9.0 and stable when hosted.
 ## Contributing
 
 Issues and pull requests are welcome in the
-[GitHub repository](https://github.com/rishitha-menusha/flutter_resilience_test).
+[GitHub repository](https://github.com/rishithamenush/flutter_resilience_test).
 Before opening a pull request, run the formatting, analysis, and test commands
 above.
